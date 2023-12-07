@@ -1,5 +1,5 @@
 import pandas as pd
-from datetime import datetime
+
 
 
 def get_report(lecturer_id,score, lecturer_data):
@@ -31,7 +31,9 @@ def get_report(lecturer_id,score, lecturer_data):
 
         elif (option == "1") :
             print('\n')
-            break           
+            break        
+        
+           
         else:
            print("Lỗi: Giá trị nhập không phù hợp")
 

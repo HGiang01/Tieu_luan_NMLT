@@ -78,7 +78,7 @@ def get_core1(get):
     #review lời nhắn và gửi
     while True:
         loi_nhan = input("Lời nhắn: ")
-        review = input("Bạn có chắc muốn gửi lời nhắn này?\n(0) Gửi\n(1) Chỉnh sửa\n(2) Thoát\n-> ")
+        review = input("Bạn có chắc muốn gửi lời nhắn này?\n(0) Gửi\n(1) Chỉnh sửa\n(2)  Quay lại menu Tính năng\n-> ")
         if (review == "0"):
             wb = openpyxl.load_workbook(link) #mở file
             sheet = wb['Sheet1'] #chọn Sheet

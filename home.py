@@ -1,8 +1,8 @@
 import pandas as pd
 # import openpyxl
 from my_module.student import student_checking, get_core, get_core0, get_core1
-from my_module.lecturer import lecture_checking, get_report
-from my_module.features import back_step, up_book
+from my_module.lecturer import lecturer_checking, get_report
+from my_module.features import back_step#, up_book
 
 lecturer_data = pd.read_excel(r'C:\Users\Admin\Desktop\python\TL\TLGiang\account\lecturer.xlsx')
 student_data = pd.read_excel(r'C:\Users\Admin\Desktop\python\TL\TLGiang\account\student.xlsx')
@@ -17,7 +17,7 @@ while True :
         break
     elif define == "1" :
         print('\n')
-        lecturer_id = lecture_checking(lecturer_data, "Mã giảng viên", "Mật khẩu")
+        lecturer_id = lecturer_checking(lecturer_data, "Mã giảng viên", "Mật khẩu")
         break
     
     print("Lỗi: Giá trị nhập khác 0 và 1")
@@ -35,7 +35,7 @@ def student() :
         elif (option == "1") :
             print('\n')
             get_core1(get_core(mssv, score_data))
-            back_step(student)
+            # back_step(student)
             break            
         
         elif (option == "2") :
@@ -63,7 +63,7 @@ def lecturer() :
         elif (option == "2") :
             print('\n')
             #Sử dụng tài liệu file client_secrets.json và mycreds.txt để xác thực và cấp quyền cho tải file
-            up_book()
+            # up_book()
             back_step(lecturer)
             break
         
