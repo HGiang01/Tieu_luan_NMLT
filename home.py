@@ -1,12 +1,12 @@
 import pandas as pd
 # import openpyxl
 from my_module.student import student_checking, get_core, get_core0, get_core1
-from my_module.lecturer import lecture_checking, get_report
+from my_module.lecturer import lecturer_checking, get_report
 from my_module.features import back_step, up_book
 
-lecturer_data = pd.read_excel(r'D:\Code\Python\Tiểu luận - NMLT\account\lecturer.xlsx')
-student_data_path = r'D:\Code\Python\Tiểu luận - NMLT\account\student.xlsx'
-score_data = r"D:\Code\Python\Tiểu luận - NMLT\score"
+lecturer_data = pd.read_excel(r'C:\Users\Admin\Desktop\python\TL\TLGiang\account\lecturer.xlsx')
+student_data_path = r'C:\Users\Admin\Desktop\python\TL\TLGiang\account\student.xlsx'
+score_data = r"C:\Users\Admin\Desktop\python\TL\TLGiang\score"
 
 #Chọn giao diện
 while True :
@@ -63,7 +63,7 @@ def lecturer() :
         elif (option == "2") :
             print('\n')
             #Sử dụng tài liệu file client_secrets.json và mycreds.txt để xác thực và cấp quyền cho tải file
-            # up_book()
+            up_book()
             back_step(lecturer)
             break
         
