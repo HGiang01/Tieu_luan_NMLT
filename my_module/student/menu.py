@@ -1,23 +1,24 @@
 import os
 import pandas as pd
-import openpyxl
-import numpy as np
-from datetime import datetime
-from my_module.features import loading_mess
+from my_module.features import loading_mess, export_ex, choose_list
 
 # tách ra để sử dụng nhiều lần không cần phải code lại
 def get_core(mssv, score_folder_path) :
     subject_list = os.listdir(score_folder_path)
-    subject_list_study = list()
+    subject_list_study, subject_list_class  = list(), list()
     #Lọc ra danh sách môn sinh viên đăng ký
     for index in range(0, len(subject_list)):
         data = pd.read_excel(score_folder_path + f"\\{subject_list[index]}" + f"\\{subject_list[index]}.xlsx", sheet_name=None)
         for sheet in list(data.keys()) :
             if any(data[sheet]["MSSV"] == int(mssv)) :
+                subject_list_class.append(sheet)
                 subject_list_study.append(subject_list[index])
 
 
-    print("Chọn môn: ")
+    print("Chọn môn: ") #**# Khong nhập gì -> Lỗi
+    #     link = score_folder_path + f"\\{subject_list[int(option)]}" + f"\\report.xlsx"
+    #                                                  ^^^^^^^^^^^
+    #     ValueError: invalid literal for int() with base 10: ''
     for index, subject in zip(range(0, len(subject_list_study)), subject_list_study) :
         print(f"({index})", subject)
 
@@ -27,11 +28,11 @@ def get_core(mssv, score_folder_path) :
         if any(option in str(idx) for idx in range(0, len(subject_list_study))) :
             break
         print("Lựa chọn không phù hợp")
-    return mssv, score_folder_path, subject_list_study, option
+    return mssv, score_folder_path, subject_list_study, option, subject_list_class
 
 #CHỨC NĂNG XEM ĐIỂM
 def get_core0(get):
-    mssv, score_folder_path, subject_list, option = get #lấy từ hàm get_core trả về
+    mssv, score_folder_path, subject_list, option = get[:len(get) - 1] #lấy từ hàm get_core trả về
     #Khi đặt sheet_name=None nghĩa là sẽ đọc tất cả các sheet, và data sẽ trở thành một dict với key:value là sheet_name:value
     data = pd.read_excel(score_folder_path + f"\\{subject_list[int(option)]}" + f"\\{subject_list[int(option)]}.xlsx", sheet_name=None)
 
@@ -70,16 +71,9 @@ def get_core0(get):
     
 #CHỨC NĂNG PHẢN HỒI
 def get_core1(get):
-    mssv, score_folder_path, subject_list, option = get
+    mssv, score_folder_path, subject_list, option = get[:len(get) - 1]
     #Lấy đường dẫn đến file phản hồi của môn đã chọn
     link = score_folder_path + f"\\{subject_list[int(option)]}" + f"\\report.xlsx"
-    data = pd.read_excel(link)
-    # lấy stt mới dựa trên stt cuối cùng (là stt lớn nhất) của file
-    stt = int(np.nan_to_num(data["STT"].max()))
-    #Not a Number
-    # ngày dạng hh:mm dd/mmm/yy
-    date_now = datetime.now().strftime('%d-%b-%y')
-    time_now = datetime.now().strftime('%H:%M')
     print('\n')
 
     # chọn ẩn danh
@@ -94,20 +88,15 @@ def get_core1(get):
     print('\n')
 
     #review lời nhắn và gửi
+    loi_nhan = input("Lời nhắn: ")
     while True:
-        loi_nhan = input("Lời nhắn: ")
         review = input("Bạn có chắc muốn gửi lời nhắn này?\n(0) Gửi\n(1) Chỉnh sửa\n(2)  Quay lại menu Tính năng\n-> ")
         if (review == "0"):
-            wb = openpyxl.load_workbook(link) #mở file
-            sheet = wb['Sheet1'] #chọn Sheet
-            # Thêm hàng mới 
-            sheet.append([stt + 1, time_now, date_now, mssv, loi_nhan])
-            wb.save(link) #lưu lại trên file đang thao tác
-            loading_mess(3, 1, "Gửi thành công!")
+            export_ex(link, "mail",[mssv, loi_nhan])
             print('\n')
             break
-
         elif (review == "1"):
+            loi_nhan = input("Lời nhắn: ")
             continue
         elif (review == "2"):
             print('\n')
@@ -115,4 +104,14 @@ def get_core1(get):
         else:
             print("Lựa chọn không phù hợp")
 
+
+def get_notify(get):
+    mssv, score_folder_path, subject_list, option, subject_list_class = get
+
+    for x, y in zip(subject_list, subject_list_class):
+        subject_list_class = pd.read_excel(score_folder_path + f"\\{subject_list}" + f"\\report.xlsx", sheet_name=subject_list_class)
+        
+
+            
+    
 

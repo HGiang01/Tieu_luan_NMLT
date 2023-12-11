@@ -1,13 +1,16 @@
 import pandas as pd
+from my_module.features import loading_mess, export_ex, choose_list
 
 
-
-def get_report(lecturer_id,score, lecturer_data):
-    data = lecturer_data #gán lại cho gọn
+def get_info(lecturer_id, lecturer_data):
+    data = pd.read_excel(lecturer_data)
     subject = data[data["Mã giảng viên"] == str(lecturer_id)]
     subject = subject.reset_index(drop = True)
     subject = subject["Bộ môn"][0]
-    read_file = pd.read_excel(score + f"\\{subject}\\report.xlsx")
+    return subject
+
+def get_report(score, subject):
+    read_file = pd.read_excel(score + f"\\{subject}\\report.xlsx", sheet_name = 'mail')
 
     print("Môn {0}:".format(subject))
     print(read_file.tail(30) if len(read_file) != 0 else "Dữ liệu rỗng!")
@@ -20,7 +23,6 @@ def get_report(lecturer_id,score, lecturer_data):
            
            while True:
             condition = input('Nhập điều kiện để đưa vào hàm "pandas.DataFrame.loc[]".\nVí dụ: read_file.MSSV == "Ân danh" -> ')
-            #"Gio" dạng object -> Khong loc theo "Gio"
             try:
                 print(read_file.loc[eval(condition)] if len(read_file.loc[eval(condition)]) != 0 else "Dữ liệu rỗng!")
                 #eval() : Biến chuỗi thành dạng biểu thức.
@@ -31,9 +33,56 @@ def get_report(lecturer_id,score, lecturer_data):
 
         elif (option == "1") :
             print('\n')
-            break        
-        
-           
-        else:
-           print("Lỗi: Giá trị nhập không phù hợp")
+            break
+        print("Lỗi: Giá trị nhập không phù hợp")
 
+
+def notify(lecturer_id, score, subject):
+    def write(mess):
+        while True:
+            w = input(f"{mess}: ")
+            if len(w) != 0:
+                return w
+            print(f"Vui lòng nhập {mess}.")
+    link = score + f"\\{subject}\\report.xlsx"
+    df = pd.read_excel(link, sheet_name = None)
+    subject_list = list()
+    for sheet in list(df.keys()):
+        if sheet[0:len(sheet) - 1] == lecturer_id:
+            subject_list.append(sheet)
+
+    
+
+    # print("Chọn lớp để thông báo:")
+    # for i in range(len(subject_list)):
+    #     print(f"{i}. {subject_list[i]}")
+    # while True:
+    #     i = input("-> ")
+    #     if subject_list[int(i)] in subject_list:
+    #         break
+    #     print("Lựa chọn không phù hợp")
+    # ---> hàm choose_list
+    i = choose_list("\nChọn lớp để thông báo:", subject_list)
+    title = write("Tiêu đề")
+    body = write("Nội dung")
+
+    while True:
+        print(f'\nTiêu đề: {title}\nNội dung: {body}')
+        option = input("\nBạn có muốn gửi thông báo này:\n(0) Gửi\n(1) Đổi tiêu đề\n(2) Đổi nội dung\n(3) Quay lại\n-> ")
+        if option == "0":
+            try:
+                export_ex(link, subject_list[int(i)],[title, body])
+                break
+            except:
+                print("Vui lòng đóng file muốn ghi!")
+                continue
+        elif option == "1":
+            title = write("Tiêu đề")
+            continue
+        elif option == "2":
+            body = write("Nội dung")
+            continue
+        elif option == "3":
+            notify(lecturer_id, score, subject)
+            break
+        print("Lựa chọn không phù hợp")
