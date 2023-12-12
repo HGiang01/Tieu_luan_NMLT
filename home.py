@@ -1,5 +1,5 @@
 import pandas as pd
-from my_module.student import student_checking, get_core, get_core0, get_core1
+from my_module.student import student_checking, get_core, get_core0, get_core1, get_notify
 from my_module.lecturer import lecturer_checking, get_info, get_report, notify
 from my_module.features import back_step, loading_mess
 
@@ -30,7 +30,7 @@ while True :
 def student() :
     while True:
         print(f"\nTài khoản: {mssv}\nTính năng:")
-        option = input("(0) Xem điểm\n(1) Phản hồi\n(2) Tài liệu\n(3) Thoát\n-> ")
+        option = input("(0) Xem điểm\n(1) Phản hồi\n(2) Xem thông báo\n(3) Tài liệu\n(4) Thoát\n-> ")
         if (option == "0"):
             print('\n')
             get_core0(get_core(mssv, score_data)) #chạy get_core0 với các biến get_core trả về
@@ -42,14 +42,20 @@ def student() :
             get_core1(get_core(mssv, score_data))
             back_step(name_function=student, mess="Quay lại")
             break            
-        
+
         elif (option == "2") :
+            print('\n')
+            get_notify(get_core(mssv, score_data, False))
+            back_step(name_function=student, mess="Quay lại")
+            break            
+        
+        elif (option == "3") :
             print('\nTruy cập đường dẫn dưới đây:\n-> https://drive.google.com/drive/u/0/folders/1AP1E0aOiem_1WkJriombjLfZyaLuiq9b')
             print('\n')
             back_step(name_function=student, mess="Quay lại")
             break
 
-        elif (option == "3") :
+        elif (option == "4") :
             print('\nChương trình kết thúc')
             break
 

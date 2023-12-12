@@ -11,6 +11,8 @@ def get_info(lecturer_id, lecturer_data):
 
 def get_report(score, subject):
     read_file = pd.read_excel(score + f"\\{subject}\\report.xlsx", sheet_name = 'mail')
+    read_file["Ngày"] = pd.to_datetime(read_file['Ngày'])
+    read_file['Ngày'] = read_file['Ngày'].dt.strftime('%d/%m/%Y')
 
     print("Môn {0}:".format(subject))
     print(read_file.tail(30) if len(read_file) != 0 else "Dữ liệu rỗng!")
@@ -45,23 +47,15 @@ def notify(lecturer_id, score, subject):
                 return w
             print(f"Vui lòng nhập {mess}.")
     link = score + f"\\{subject}\\report.xlsx"
-    df = pd.read_excel(link, sheet_name = None)
+    read_file = pd.read_excel(link, sheet_name = None)
     subject_list = list()
-    for sheet in list(df.keys()):
+    for sheet in list(read_file.keys()):
         if sheet[0:len(sheet) - 1] == lecturer_id:
             subject_list.append(sheet)
 
     
 
-    # print("Chọn lớp để thông báo:")
-    # for i in range(len(subject_list)):
-    #     print(f"{i}. {subject_list[i]}")
-    # while True:
-    #     i = input("-> ")
-    #     if subject_list[int(i)] in subject_list:
-    #         break
-    #     print("Lựa chọn không phù hợp")
-    # ---> hàm choose_list
+
     i = choose_list("\nChọn lớp để thông báo:", subject_list)
     title = write("Tiêu đề")
     body = write("Nội dung")
@@ -71,7 +65,7 @@ def notify(lecturer_id, score, subject):
         option = input("\nBạn có muốn gửi thông báo này:\n(0) Gửi\n(1) Đổi tiêu đề\n(2) Đổi nội dung\n(3) Quay lại\n-> ")
         if option == "0":
             try:
-                export_ex(link, subject_list[int(i)],[title, body])
+                export_ex(link, i,[title, body])
                 break
             except:
                 print("Vui lòng đóng file muốn ghi!")
