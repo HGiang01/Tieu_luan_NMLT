@@ -26,7 +26,7 @@ def get_core(mssv, score_folder_path, get_input = True) :
         while True :
             option = input("-> ")
             #Nếu lựa chọn nằm trong index của subject_list_study thì được xem là phù hợp
-            if any(option in str(idx) for idx in range(0, len(subject_list_study))) :
+            if (option in [str(i) for i in range(len(subject_list_study))]):
                 break
             print("Lựa chọn không phù hợp")
     return mssv, score_folder_path, subject_list_study, option, subject_list_class
@@ -91,7 +91,7 @@ def get_core1(get):
     #review lời nhắn và gửi
     loi_nhan = input("Lời nhắn: ")
     while True:
-        review = input("Bạn có chắc muốn gửi lời nhắn này?\n(0) Gửi\n(1) Chỉnh sửa\n(2)  Quay lại menu Tính năng\n-> ")
+        review = input("Bạn có chắc muốn gửi lời nhắn này?\n(0) Gửi\n(1) Chỉnh sửa\n-> ")
         if (review == "0"):
             export_ex(link, "mail",[mssv, loi_nhan])
             print('\n')
@@ -99,9 +99,6 @@ def get_core1(get):
         elif (review == "1"):
             loi_nhan = input("Lời nhắn: ")
             continue
-        elif (review == "2"):
-            print('\n')
-            break
         else:
             print("Lựa chọn không phù hợp")
 
@@ -114,7 +111,7 @@ def get_notify(get):
         df = pd.read_excel(score_folder_path + f"\\{x}" + f"\\report.xlsx", sheet_name=y)
         df.insert(df.shape[1], "Class", y)
         today = datetime.today()
-        df["Ngày"] = pd.to_datetime(df['Ngày'])
+        df['Ngày'] = pd.to_datetime(df['Ngày'])
         df['Today'] = (today - df['Ngày']).dt.days
         df['Ngày'] = df['Ngày'].dt.strftime('%d/%m/%Y')
         
@@ -132,10 +129,8 @@ def get_notify(get):
     else:
         print("Không có thông báo mới trong 7 ngày qua.")
 
-    while True:
-        option = choose_list("Chọn lớp: ", subject_list_class + ["Quay lại"], True)
-        if option == "Quay lại": break
-        print(no_list.iloc[:,1:-2].loc[no_list.Class == option].reset_index(drop = True))
-        loading_mess(3,1,"")
+    option = choose_list("Chọn lớp: ", subject_list_class, True)
+    print(no_list.iloc[:,1:-2].loc[no_list.Class == option].reset_index(drop = True))
+    loading_mess(3,1,"")
     
 

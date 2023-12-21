@@ -1,11 +1,11 @@
 import pandas as pd
 from my_module.student import student_checking, get_core, get_core0, get_core1, get_notify
-from my_module.lecturer import lecturer_checking, get_info, get_report, notify
-from my_module.features import back_step, loading_mess
+from my_module.lecturer import lecturer_checking, get_info, get_report, notify, get_chart
+from my_module.features import back_step, loading_mess, up_book
 
-lecturer_data_path = r'C:\Users\Admin\Desktop\python\TL\TLGiang\account\lecturer.xlsx'
-student_data_path = r'C:\Users\Admin\Desktop\python\TL\TLGiang\account\student.xlsx'
-score_data = r"C:\Users\Admin\Desktop\python\TL\TLGiang\score"
+lecturer_data_path = r'D:\Code\Python\Tiểu luận - NMLT\account\lecturer.xlsx'
+student_data_path = r'D:\Code\Python\Tiểu luận - NMLT\account\student.xlsx'
+score_data = r"D:\Code\Python\Tiểu luận - NMLT\score"
 
 #Chọn giao diện
 while True :
@@ -67,7 +67,7 @@ def lecturer() :
         option = input("(0) Lập đồ thị\n(1) Xem phản hồi\n(2) Thông báo\n(3) Tài liệu\n(4) Thoát\n -> ")
         if (option == "0") :
             print('\n')
-            print("option 0")
+            get_chart(lecturer_id, lecturer_data_path, score_data)
             back_step(name_function=lecturer, mess="Quay lại")
             break
 
@@ -84,7 +84,7 @@ def lecturer() :
         elif (option == "3") :
             print('\n')
             #Sử dụng tài liệu file client_secrets.json và mycreds.txt để xác thực và cấp quyền cho tải file
-            # up_book()
+            up_book()
             back_step(name_function=lecturer, mess="Quay lại")
             break
         

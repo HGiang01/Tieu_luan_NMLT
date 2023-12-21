@@ -2,7 +2,7 @@ def choose_list(mess, list_item, get_input = True):
     while True:
         print(f"{mess}")
         for i in range(len(list_item)):
-            print(f"{i}. {list_item[i]}")
+            print(f"({i}) {list_item[i]}")
         if get_input != True: break
         i = input("-> ")
         try:
